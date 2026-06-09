@@ -4,11 +4,11 @@ from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
-from database import DatabaseError, SQLiteDatabase
+from database import DatabaseError, SQLMindDatabase
 
 
 mcp = FastMCP("SQLMind MCP Server")
-db = SQLiteDatabase()
+db = SQLMindDatabase()
 
 
 def _safe_call(operation: str, *args: Any) -> dict[str, Any]:
@@ -43,6 +43,12 @@ def get_database_schema() -> dict[str, Any]:
 def run_select_query(sql: str) -> dict[str, Any]:
     """Execute one safe read-only SELECT query."""
     return _safe_call("run_select_query", sql)
+
+
+@mcp.tool()
+def connect_database(config: dict[str, Any]) -> dict[str, Any]:
+    """Connect SQLMind to a SQLite, PostgreSQL, or MySQL database."""
+    return _safe_call("connect_database", config)
 
 
 if __name__ == "__main__":
